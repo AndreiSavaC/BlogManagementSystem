@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:view>
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{userBean.redirectIfLoggedIn}" />
+    </f:metadata>
+
+    <h:head>
+        <title>Register</title>
+        <h:outputStylesheet name="css/bootstrap-5.3.3-dist/css/bootstrap.min.css" />
+    </h:head>
+
+    <h:body class="bg-light">
+        <div class="container d-flex justify-content-center align-items-center min-vh-100">
+            <div class="card p-4" style="width: 100%; max-width: 500px;">
+                <h2 class="card-title text-center mb-4">Register</h2>
+                <h:form>
+                    <div class="mb-3">
+                        <h:outputLabel for="username" value="Username:" styleClass="form-label" />
+                        <h:inputText id="username" value="#{registerBean.username}" required="true" styleClass="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <h:outputLabel for="email" value="Email:" styleClass="form-label" />
+                        <h:inputText id="email" value="#{registerBean.email}" required="true" styleClass="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <h:outputLabel for="password" value="Password:" styleClass="form-label" />
+                        <h:inputSecret id="password" value="#{registerBean.password}" required="true" styleClass="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <h:outputLabel for="role" value="Role:" styleClass="form-label" />
+                        <h:selectOneMenu id="role" value="#{registerBean.role}" styleClass="form-select">
+                            <f:selectItem itemLabel="USER" itemValue="USER" />
+                            <f:selectItem itemLabel="ADMIN" itemValue="ADMIN" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="d-flex flex-column align-items-center">
+                        <h:button value="Ai deja cont? Autentifică-te" outcome="login.xhtml"
+                                  styleClass="btn btn-link mb-3"/>
+                        <h:commandButton value="Register" action="#{registerBean.register}" styleClass="btn btn-success w-100" />
+                    </div>
+                    <h:messages globalOnly="true" styleClass="mt-3 text-danger text-center"/>
+                </h:form>
+            </div>
+        </div>
+
+        <h:outputScript name="css/bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js" />
+        <h:outputScript name="css/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js" />
+    </h:body>
+</f:view>
+</html>

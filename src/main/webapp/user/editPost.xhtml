@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Edit Blog Post</title>
+    <h:outputStylesheet name="css/bootstrap-5.3.3-dist/css/bootstrap.min.css"/>
+
+    <style type="text/css">
+        body {
+            padding-top: 5rem;
+            background-color: #f8f9fa;
+        }
+
+        .navbar-custom {
+            background-color: #343a40 !important;
+        }
+
+        .navbar-custom .navbar-brand {
+            color: white !important;
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+
+        .btn-update {
+            width: 100%;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    </style>
+
+</h:head>
+
+<h:body>
+
+    <h:form>
+        <h:panelGroup layout="block" styleClass="navbar navbar-expand-lg navbar-custom fixed-top">
+            <h:outputLink value="user.xhtml" styleClass="navbar-brand ms-3">BlogApp</h:outputLink>
+
+            <h:panelGroup id="navbarContent" layout="block" styleClass="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <h:commandButton value="Create New Post"
+                                         action="#{blogPostBean.prepareCreatePost}"
+                                         styleClass="btn btn-primary"/>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+                    <li class="nav-item">
+                        <h:commandButton value="Logout"
+                                         action="#{userBean.logout}"
+                                         styleClass="btn btn-danger"/>
+                    </li>
+                </ul>
+            </h:panelGroup>
+        </h:panelGroup>
+    </h:form>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="form-container">
+                    <h2 class="form-title">Edit Blog Post</h2>
+
+                    <h:messages globalOnly="true" styleClass="alert alert-info"/>
+
+                    <h:form id="editForm">
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <h:inputText id="title" value="#{blogPostBean.title}" required="true"
+                                         requiredMessage="Title is required."
+                                         styleClass="form-control"/>
+                            <h:message for="title" styleClass="text-danger"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="content">Content:</label>
+                            <h:inputTextarea id="content" value="#{blogPostBean.content}" required="true" rows="5"
+                                             requiredMessage="Content is required."
+                                             styleClass="form-control"/>
+                            <h:message for="content" styleClass="text-danger"/>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="category">Category:</label>
+                            <h:selectOneMenu id="category" value="#{blogPostBean.categoryId}"
+                                             styleClass="form-control">
+                                <f:selectItems value="#{blogPostBean.categories}" var="cat"
+                                               itemValue="#{cat.id}" itemLabel="#{cat.name}"/>
+                            </h:selectOneMenu>
+                            <h:message for="category" styleClass="text-danger"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tags:</label>
+                            <h:panelGroup id="tagsContainer">
+                                <div class="tag-container">
+                                    <ui:repeat value="#{blogPostBean.tags}" var="tag">
+                                        <h:commandButton value="#{tag.name}"
+                                                         actionListener="#{blogPostBean.toggleTag(tag.id)}"
+                                                         styleClass="#{blogPostBean.selectedTagIds.contains(tag.id) ? 'btn btn-primary tag-button' : 'btn btn-outline-primary tag-button'}">
+                                            <f:ajax execute="@this" render=":editForm:tagsContainer"/>
+
+                                        </h:commandButton>
+                                    </ui:repeat>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+
+                        <h:commandButton value="Update Post" action="#{blogPostBean.updatePost}"
+                                         styleClass="btn btn-primary btn-update mt-3"/>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h:outputScript name="css/bootstrap-5.3.3-dist/js/jquery-3.7.1.min.js"/>
+    <h:outputScript name="css/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"/>
+
+</h:body>
+</html>
